@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the comprehensive build system refactoring implemented to ensure maximum compatibility, stability, and performance across Android 9 (API 28) to Android 16+ (API 36+), with special focus on Android 15 arm64.
+This document describes the comprehensive build system refactoring implemented to ensure maximum compatibility, stability, and performance across Android 9 (API 28) to Android 16+ (API 36+), with special focus on Android 15 ARM devices.
 
 ## Android Compatibility
 
@@ -19,8 +19,9 @@ The increased minimum SDK from 26 to 28 provides:
 
 ### Architecture Support
 - **Primary**: arm64-v8a (64-bit ARM)
-- **Optimized for**: Android 15 on arm64 devices
- - **Packaging**: Only arm64-v8a libraries are shipped; 32-bit and x86 variants are removed to reduce attack surface and bundle size.
+- **Secondary**: armeabi-v7a (32-bit ARM)
+- **Optimized for**: Android 15 on ARM devices
+- **Packaging**: APKs ship native libraries for both official mobile ARM ABIs (armeabi-v7a and arm64-v8a).
 
 ## Java and Kotlin Configuration
 
@@ -31,6 +32,8 @@ All modules now use consistent versions:
 - **Gradle**: 8.11.1
 - **Kotlin**: 2.2.20
 - **Android Gradle Plugin**: 8.9.1
+
+> Build execution note: run Gradle with JDK 17/21/22/23/24. JDK 25 is not yet supported by the Gradle Kotlin DSL toolchain parser used in this project.
 
 ### Compiler Flags
 Kotlin compiler flags for optimal performance:
@@ -87,7 +90,7 @@ Enabled for better class loading and reduced ANR risks.
 ## NDK Configuration
 
 ### Native Libraries
-- **Target ABI**: arm64-v8a only
+- **Target ABIs**: armeabi-v7a + arm64-v8a
 - **Debug Symbols**: 
   - Release: SYMBOL_TABLE (for crash analysis)
   - Debug: NONE (faster builds)
