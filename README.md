@@ -69,6 +69,24 @@ fully respecting your privacy. Currently in beta state.
 
 ## Where is the compiled APK?
 
+### Build matrix local (unsigned + internal signed)
+
+Use `scripts/build_apk_matrix.sh` to generate unsigned APK artifacts and an internal debug-key signed APK for validation.
+
+```bash
+# release unsigned + debug-key signed artifact
+BUILD_TRACK=release SIGN_WITH_DEBUG_KEY=1 ./scripts/build_apk_matrix.sh
+
+# deterministic container build (uses utils/repr_build image)
+USE_DOCKER_REPRO=1 BUILD_TRACK=release ./scripts/build_apk_matrix.sh
+```
+
+Notes:
+- Official release signing remains external (CI secrets/signing.properties).
+- This helper does not replace production signing; it only adds an internal validation signed artifact.
+- ABI contract stays `armeabi-v7a` + `arm64-v8a` as defined in `app/build.gradle.kts`.
+
+
 - **Prebuilt**: Download signed APKs from the [GitHub Releases](https://github.com/florisboard/florisboard/releases) page (stable and preview tracks) or install via the official store/repo options: F-Droid, IzzyOnDroid, Google Play testing channels, or the Obtainium templates.
 - **Local builds**: `./gradlew :app:assembleRelease` or `./build_unsigned.sh` write to `app/build/outputs/apk/release/`; `./gradlew :app:assembleBeta` writes to `app/build/outputs/apk/beta/`; `./gradlew :app:assembleDebug` writes to `app/build/outputs/apk/debug/`.
 
